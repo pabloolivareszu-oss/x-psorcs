@@ -1,0 +1,8 @@
+fam high_prob_improvement prolonged_stagnation low_prob_low_diversity xai_diversity_negative xai_stagnation_harmful xai_operator_positive
+Classical 85.65 4.99 3.63 2.85 2.62 0.27
+CEC2014 64.00 16.51 9.86 3.33 6.08 0.22
+CEC2017 77.23 8.55 7.35 2.82 3.77 0.28
+CEC2022 65.85 13.28 11.75 3.31 5.55 0.25
+BBOB 59.85 17.28 13.24 2.78 6.61 0.25
+FIR 92.22 1.64 2.88 1.61 1.32 0.32
+Rail 1.06 73.42 6.01 3.36 16.11 0.03

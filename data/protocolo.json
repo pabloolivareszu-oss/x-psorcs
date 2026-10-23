@@ -1,0 +1,593 @@
+{
+ "familias": {
+  "classical": {
+   "celdas": 15,
+   "mejor": 10,
+   "igual": 5,
+   "peor": 0,
+   "menor_media": 14,
+   "A12_media": 0.701,
+   "A12_ic": [
+    0.64,
+    0.762
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "mediana_favor": 3,
+    "grande_favor": 7,
+    "pequena_favor": 2,
+    "despreciable_favor": 3
+   },
+   "p_wilcoxon": 6.103515625e-05,
+   "p_holm": 0.00030517578125
+  },
+  "cec2014": {
+   "celdas": 90,
+   "mejor": 8,
+   "igual": 80,
+   "peor": 2,
+   "menor_media": 55,
+   "A12_media": 0.531,
+   "A12_ic": [
+    0.513,
+    0.549
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "pequena_favor": 20,
+    "grande_favor": 1,
+    "despreciable_contra": 25,
+    "despreciable_favor": 26,
+    "mediana_favor": 10,
+    "pequena_contra": 5,
+    "mediana_contra": 1,
+    "grande_contra": 2
+   },
+   "p_wilcoxon": 0.0025634050909979313,
+   "p_holm": 0.010253620363991725
+  },
+  "cec2017": {
+   "celdas": 73,
+   "mejor": 8,
+   "igual": 65,
+   "peor": 0,
+   "menor_media": 52,
+   "A12_media": 0.561,
+   "A12_ic": [
+    0.542,
+    0.58
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "pequena_favor": 21,
+    "mediana_favor": 8,
+    "grande_favor": 4,
+    "despreciable_favor": 25,
+    "despreciable_contra": 12,
+    "mediana_contra": 1,
+    "pequena_contra": 2
+   },
+   "p_wilcoxon": 1.3875756536723621e-05,
+   "p_holm": 8.325453922034173e-05
+  },
+  "cec2022": {
+   "celdas": 24,
+   "mejor": 3,
+   "igual": 21,
+   "peor": 0,
+   "menor_media": 12,
+   "A12_media": 0.534,
+   "A12_ic": [
+    0.493,
+    0.583
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "grande_favor": 2,
+    "despreciable_contra": 8,
+    "pequena_favor": 3,
+    "mediana_favor": 1,
+    "despreciable_favor": 7,
+    "pequena_contra": 3
+   },
+   "p_wilcoxon": 0.6839864253997803,
+   "p_holm": 0.6839864253997803
+  },
+  "bbob": {
+   "celdas": 48,
+   "mejor": 1,
+   "igual": 47,
+   "peor": 0,
+   "menor_media": 25,
+   "A12_media": 0.514,
+   "A12_ic": [
+    0.505,
+    0.525
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "despreciable_favor": 25,
+    "pequena_favor": 3,
+    "despreciable_contra": 18,
+    "mediana_favor": 2
+   },
+   "p_wilcoxon": 0.13587920273665074,
+   "p_holm": 0.2717584054733015
+  },
+  "fir": {
+   "celdas": 8,
+   "mejor": 0,
+   "igual": 8,
+   "peor": 0,
+   "menor_media": 8,
+   "A12_media": 0.567,
+   "A12_ic": [
+    0.551,
+    0.581
+   ],
+   "techos": 0,
+   "magnitudes": {
+    "pequena_favor": 6,
+    "despreciable_favor": 2
+   },
+   "p_wilcoxon": 0.015625,
+   "p_holm": 0.046875
+  }
+ },
+ "rail": {
+  "rail507": {
+   "corridas": 31,
+   "p_mw": 0.9429682190631117,
+   "A12": 0.506,
+   "dif_rpd_media": 0.0,
+   "dif_rpd_ic": [
+    -0.389,
+    0.371
+   ],
+   "brecha_cerrada_pct": -0.0,
+   "costo_base": 186.77,
+   "costo_online": 186.77,
+   "dif_costo": 0.0
+  },
+  "rail516": {
+   "corridas": 31,
+   "p_mw": 0.6296480635503998,
+   "A12": 0.534,
+   "dif_rpd_media": 0.071,
+   "dif_rpd_ic": [
+    -0.089,
+    0.248
+   ],
+   "brecha_cerrada_pct": 3.3,
+   "costo_base": 185.9,
+   "costo_online": 185.77,
+   "dif_costo": 0.13
+  },
+  "rail582": {
+   "corridas": 31,
+   "p_mw": 0.011496527266895788,
+   "A12": 0.683,
+   "dif_rpd_media": 0.459,
+   "dif_rpd_ic": [
+    0.138,
+    0.78
+   ],
+   "brecha_cerrada_pct": 6.8,
+   "costo_base": 225.16,
+   "costo_online": 224.19,
+   "dif_costo": 0.97
+  }
+ },
+ "completitud": {
+  "SIA-online": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "SIA-base": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "AMALGAM": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "APGSK-IMODE": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "ASGK": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "BKA": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "BWO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "DBO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "EA4eig": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740
+   }
+  },
+  "EBOwithCMAR": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740
+   }
+  },
+  "FGIN": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "GOOSE": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "GWO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "HHO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "IGWO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "JADE": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "KRMG": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "LHHO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "LSHADE": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740
+   }
+  },
+  "LSHADE-EpSin": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740
+   }
+  },
+  "SACS": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  },
+  "SO": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=2745": 742,
+    "bench=2730": 910,
+    "bench=2670": 370,
+    "bench=2760": 890,
+    "bench=2790": 674,
+    "bench=2715": 676,
+    "bench=2805": 170,
+    "bench=2865": 162,
+    "bench=2700": 1186,
+    "bench=2685": 410,
+    "bench=2655": 474,
+    "bench=2775": 588,
+    "bench=2820": 176,
+    "bench=2580": 88,
+    "bench=2850": 136,
+    "bench=2610": 72,
+    "bench=2835": 16,
+    "rail=18165": 4,
+    "rail=18240": 3,
+    "rail=18075": 3,
+    "rail=18120": 4,
+    "rail=17940": 2,
+    "rail=18315": 3,
+    "rail=18030": 3,
+    "rail=18105": 4,
+    "rail=17865": 2,
+    "rail=17955": 2,
+    "rail=17985": 3,
+    "rail=18150": 6,
+    "rail=17895": 3,
+    "rail=17835": 1,
+    "rail=18000": 3,
+    "rail=18195": 4,
+    "rail=18015": 6,
+    "rail=17970": 3,
+    "rail=17790": 1,
+    "rail=18270": 2,
+    "rail=18060": 5,
+    "rail=18045": 3,
+    "rail=18300": 1,
+    "rail=18210": 1,
+    "rail=18180": 4,
+    "rail=18090": 5,
+    "rail=17925": 2,
+    "rail=17745": 1,
+    "rail=18225": 2,
+    "rail=17910": 1,
+    "rail=18135": 2,
+    "rail=18330": 1,
+    "rail=17880": 1,
+    "rail=18285": 1,
+    "rail=17760": 1
+   }
+  },
+  "UMOEAII": {
+   "corridas": {
+    "classical": 450,
+    "cec2014": 2700,
+    "cec2017": 2190,
+    "cec2022": 720,
+    "bbob": 1440,
+    "fir": 240,
+    "rail": 93
+   },
+   "celdas_incompletas": [],
+   "evaluaciones": {
+    "bench=3000": 7740,
+    "rail=20000": 93
+   }
+  }
+ }
+}
