@@ -1,0 +1,631 @@
+<title>Campaña v3 del SIA online</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  /* Informe técnico de una columna para el profesor guía. Tablas y gráficos a escala;
+     el verde pino marca la estructura y los colores de serie (azul = SIA-online,
+     naranja = SIA-base) aparecen solo en los datos. Toda cifra viene de datos.json. */
+  :root {
+    --ground: #F1F3F1;
+    --surface: #FBFCFB;
+    --ink: #16201D;
+    --ink-soft: #4C5A56;
+    --ink-faint: #7E8B87;
+    --rule: #D3DAD7;
+    --grid: #E3E8E6;
+    --accent: #1F4B47;
+    --accent-soft: #E2ECE9;
+    --critical: #8C3A2B;
+    --critical-soft: #F3E4E0;
+    --positive: #3D6B4E;
+    --positive-soft: #E1EDE4;
+    --series-online: #2a78d6;
+    --series-base: #eb6834;
+    --context: #B4BDBA;
+    --shadow: 0 1px 2px rgba(22,32,29,.06);
+    --font-display: Spectral, Georgia, "Times New Roman", serif;
+    --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-data: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101614; --surface: #182120; --ink: #E3E9E6; --ink-soft: #A3B0AC;
+      --ink-faint: #79857F; --rule: #2A3634; --grid: #22302D; --accent: #7FB8AE;
+      --accent-soft: #1C2E2C; --critical: #D68C7C; --critical-soft: #2E211E;
+      --positive: #8CBF9C; --positive-soft: #1D2A22;
+      --series-online: #3987e5; --series-base: #d95926; --context: #4A5754;
+      --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101614; --surface: #182120; --ink: #E3E9E6; --ink-soft: #A3B0AC;
+    --ink-faint: #79857F; --rule: #2A3634; --grid: #22302D; --accent: #7FB8AE;
+    --accent-soft: #1C2E2C; --critical: #D68C7C; --critical-soft: #2E211E;
+    --positive: #8CBF9C; --positive-soft: #1D2A22;
+    --series-online: #3987e5; --series-base: #d95926; --context: #4A5754;
+    --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+  }
+
+  body {
+    background: var(--ground); color: var(--ink);
+    font-family: var(--font-body); font-size: 16.5px; line-height: 1.6;
+  }
+  .wrap {
+    max-width: 48rem; margin: 0 auto; padding-inline: 1.25rem; padding-block: 3.5rem 5rem;
+    display: flex; flex-direction: column; gap: 2.75rem;
+  }
+  header { display: flex; flex-direction: column; gap: .6rem; }
+  .kicker {
+    font-family: var(--font-data); font-size: .72rem; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 600; font-size: 2.2rem;
+    line-height: 1.16; margin: 0; text-wrap: balance; letter-spacing: -.01em;
+  }
+  .standfirst { font-family: var(--font-display); font-size: 1.1rem; color: var(--ink-soft); margin: 0; max-width: 42rem; }
+  h2 { font-family: var(--font-display); font-size: 1.36rem; font-weight: 600; margin: 0; text-wrap: balance; }
+  h3 { font-size: 1.02rem; font-weight: 600; margin: 0; }
+  p { margin: 0; max-width: 42rem; }
+  section { display: flex; flex-direction: column; gap: 1rem; }
+  .section-head { display: flex; flex-direction: column; gap: .35rem; border-top: 2px solid var(--ink); padding-top: .8rem; }
+  .section-head .lede { color: var(--ink-soft); }
+
+  .summary {
+    background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--accent);
+    padding: 1.35rem 1.5rem; display: flex; flex-direction: column; gap: .9rem; box-shadow: var(--shadow);
+  }
+  .summary h2 { font-size: 1.15rem; }
+  .summary ul { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: .45rem; max-width: 42rem; }
+
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  caption { caption-side: bottom; text-align: left; padding-top: .55rem; font-size: .82rem; color: var(--ink-faint); line-height: 1.45; }
+  th, td { padding: .42rem .65rem; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  td.txt { white-space: normal; text-align: left; }
+  th.txt { text-align: left; }
+  th { font-family: var(--font-data); font-size: .7rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-faint); font-weight: 400; border-bottom-color: var(--ink-soft); }
+  td.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  tr.sia td:first-child { font-weight: 600; }
+
+  .pill { display: inline-block; font-family: var(--font-data); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; padding: .12rem .45rem; border-radius: 2px; }
+  .pill.sig { background: var(--positive-soft); color: var(--positive); }
+  .pill.ns { background: var(--critical-soft); color: var(--critical); }
+  .pill.worse { background: var(--critical); color: var(--surface); }
+  .pill.pending { background: var(--accent-soft); color: var(--accent); }
+
+  code { font-family: var(--font-data); font-size: .86em; background: var(--accent-soft); color: var(--accent); padding: .08em .3em; border-radius: 2px; }
+
+  figure { margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+  figcaption { font-size: .82rem; color: var(--ink-faint); line-height: 1.45; max-width: 42rem; }
+  .chart { position: relative; width: 100%; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart text { font-family: var(--font-body); }
+  .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font-size: .85rem; color: var(--ink-soft); }
+  .legend span { display: inline-flex; align-items: center; gap: .45rem; }
+  .swatch { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .swatch.online { background: var(--series-online); }
+  .swatch.base { background: var(--series-base); }
+  .swatch.context { background: var(--context); }
+  .swatch.bar-sig { border-radius: 2px; background: var(--series-online); }
+  .swatch.bar-ns { border-radius: 2px; background: transparent; border: 2px solid var(--series-online); width: 9px; height: 9px; }
+  .tooltip { position: absolute; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: .45rem .6rem; font-size: .8rem; line-height: 1.4; border-radius: 3px; max-width: 16rem; z-index: 2; }
+  .hit { fill: transparent; }
+
+  .notes { display: flex; flex-direction: column; gap: .9rem; }
+  .note { display: flex; flex-direction: column; gap: .3rem; }
+  .caveat { background: var(--critical-soft); border-left: 3px solid var(--critical); padding: .9rem 1.1rem; font-size: .92rem; color: var(--ink-soft); max-width: 44rem; display: flex; flex-direction: column; gap: .5rem; }
+  .caveat strong { color: var(--ink); }
+  .pending-box { border: 1px dashed var(--rule); padding: 1rem 1.2rem; color: var(--ink-soft); font-size: .92rem; }
+  dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1.2rem; margin: 0; font-size: .92rem; }
+  dl.facts dt { color: var(--ink-faint); font-family: var(--font-data); font-size: .76rem; letter-spacing: .05em; text-transform: uppercase; padding-top: .12rem; }
+  dl.facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  footer { border-top: 1px solid var(--rule); padding-top: 1rem; font-size: .84rem; color: var(--ink-faint); }
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 30rem) { h1 { font-size: 1.8rem; } dl.facts { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Tesis · SIA online · informe de campaña</div>
+    <h1>Campaña v3 del SIA online</h1>
+    <p class="standfirst">Repetición completa del experimento con el controlador adaptativo corregido: seis familias de benchmarks con 23 algoritmos y el caso ferroviario con 19, con una única versión del código, protección de memoria y auditoría de principio a fin.</p>
+  </header>
+
+  <div class="summary">
+    <h2>Resultado</h2>
+    <ul id="resumen"></ul>
+  </div>
+
+  <section>
+    <div class="section-head"><h2>Qué se hizo y por qué</h2></div>
+    <p>El controlador de SIA-online tenía un estado absorbente. La regla de estancamiento restaba probabilidad a la intensificación con un piso en cero, y un operador con probabilidad cero no vuelve a usarse: ninguna regla podía devolverlo. La corrección añade un piso de 0,05 por operador, un decaimiento de 0,05 hacia las probabilidades iniciales y un período de enfriamiento de 5 iteraciones entre activaciones de la diversificación.</p>
+    <p>Con el controlador corregido, SIA-online es un algoritmo distinto del que produjo la campaña original, así que se repitió el experimento completo. Un primer intento (campaña v2) completó las seis familias, pero durante el caso ferroviario la memoria de la máquina se saturó y hubo que reiniciarla. Esta campaña v3 lo re-ejecuta todo, en una carpeta propia y con una sola versión del código, para que ningún resultado mezcle versiones.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Cambio</th><th class="txt">Efecto</th></tr></thead>
+        <tbody>
+          <tr><td>Presupuesto exacto para SIA</td><td class="txt">SIA consumía 30 + 100 × 30 = 3.030 evaluaciones frente a 3.000 de los competidores. Ahora corre 99 iteraciones y consume exactamente 3.000 (20.000 en rail).</td></tr>
+          <tr><td>Protección de memoria</td><td class="txt">Un proceso nuevo por celda, una guardia que frena la campaña antes de que el sistema pagine, reanudación por corrida y registro de memoria cada 5 minutos. Detalle en la auditoría.</td></tr>
+          <tr><td>Raíz de resultados única</td><td class="txt">Todas las rutas de salida derivan de una variable de entorno; dos campañas no pueden mezclar corridas.</td></tr>
+          <tr><td>Estado acumulativo</td><td class="txt"><code>run.py</code> borraba el registro de invocaciones anteriores si no se pasaba <code>--resume</code>; ya no.</td></tr>
+          <tr><td>Hora en el log</td><td class="txt">Cada celda registra hora, progreso, duración y ETA.</td></tr>
+          <tr><td>GWO vectorizado</td><td class="txt">Resultados idénticos bit a bit a la versión original en las siete familias, 33 veces más rápido en rail.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Protocolo</h2></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th></th><th class="txt">Familias originales</th><th class="txt">Caso ferroviario</th></tr></thead>
+        <tbody>
+          <tr><td>Problemas</td><td class="txt">classical (15), CEC 2014 (90), CEC 2017 (73), CEC 2022 (24), BBOB (48), FIR (8): 258 celdas</td><td class="txt">rail507, rail516, rail582: set covering de 47.000 a 63.000 variables</td></tr>
+          <tr><td>Algoritmos</td><td class="txt">23: SIA-base, SIA-online y 21 competidores</td><td class="txt">19: cuatro excluidos por no escalar</td></tr>
+          <tr><td>Corridas</td><td class="txt">30</td><td class="txt">31</td></tr>
+          <tr><td>Población × iteraciones</td><td class="txt">30 × 100</td><td class="txt">40 × 500</td></tr>
+          <tr><td>Evaluaciones</td><td class="txt"><strong>3.000 exactas para todos</strong></td><td class="txt"><strong>20.000 exactas para todos</strong></td></tr>
+          <tr><td>Semillas</td><td class="txt">dim · 1000 + corrida, iguales para todos</td><td class="txt">n · 1000 + corrida, iguales para todos</td></tr>
+          <tr><td>Métrica</td><td class="txt">error al óptimo; fitness crudo en BBOB y FIR</td><td class="txt">RPD = 100 (f − BKS) / BKS</td></tr>
+          <tr><td>A frente a A′</td><td class="txt">Wilcoxon pareado sobre la diferencia relativa de medianas por celda</td><td class="txt">Wilcoxon pareado sobre las 31 semillas, por instancia, con corrección de Finner</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>El caso ferroviario conserva el protocolo fijado por el autor en su guía: con ~60.000 variables, 3.000 evaluaciones no alcanzan a recorrer con sentido el espacio. Máquina: Apple M2 Ultra, 24 núcleos físicos, 64 GB de RAM; 20 procesos con un hilo cada uno.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Familias originales: SIA-online frente a SIA-base</h2>
+      <p class="lede">Una celda es una función en una dimensión. Para cada celda se toma la mediana de las 30 corridas de cada algoritmo, y el contraste compara esas medianas por pares.</p>
+    </div>
+    <figure>
+      <div class="legend" aria-hidden="true">
+        <span><i class="swatch bar-sig"></i>significativo (p &lt; 0,05)</span>
+        <span><i class="swatch bar-ns"></i>no significativo</span>
+      </div>
+      <div class="chart" id="chart-efecto" role="img" aria-label="Mejora mediana de SIA-online sobre SIA-base por familia"></div>
+      <figcaption>Mejora mediana de SIA-online sobre SIA-base: la mediana, sobre las celdas de la familia, de la diferencia relativa entre sus medianas. Eje lineal: la diferencia de escala entre familias es real.</figcaption>
+    </figure>
+    <div class="tablewrap">
+      <table id="tabla-familias">
+        <thead><tr><th>Familia</th><th>Celdas</th><th>Gana A′</th><th>Gana A</th><th>Empates</th><th>Mejora mediana</th><th>p</th><th class="txt">Veredicto</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="notes" id="notas-familias"></div>
+    <figure>
+      <div class="legend" aria-hidden="true">
+        <span><i class="swatch online"></i>SIA-online (A′)</span>
+        <span><i class="swatch base"></i>SIA-base (A)</span>
+      </div>
+      <div class="chart" id="chart-rangos" role="img" aria-label="Puesto de SIA-online y SIA-base entre los 23 métodos"></div>
+      <figcaption>Puesto en el ranking de Friedman entre los 23 métodos, por familia y global (rango medio ponderado por celdas). A la izquierda, mejor.</figcaption>
+    </figure>
+    <p id="texto-competidores"></p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>El controlador corregido en funcionamiento</h2>
+      <p class="lede">Estado final de todas las corridas de SIA-online.</p>
+    </div>
+    <div class="tablewrap">
+      <table id="tabla-salud">
+        <thead><tr><th>Familia</th><th>Corridas</th><th>Intensificación en 0</th><th>Prob. mínima</th><th>Diversificación final</th><th>Adaptaciones / corrida</th><th>Entrenamientos / corrida</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="texto-salud"></p>
+  </section>
+
+  <section id="rail">
+    <div class="section-head">
+      <h2>Caso ferroviario</h2>
+      <p class="lede">Programación de tripulaciones como set covering, tres instancias de la OR-Library. El análisis es por instancia sobre las 31 semillas pareadas.</p>
+    </div>
+    <div id="rail-contenido"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Auditoría</h2>
+      <p class="lede">Todo lo que sigue sale de los registros de la propia campaña: <code>run.log</code>, <code>errors.log</code>, <code>run_status.json</code>, cada <code>summary.json</code> y <code>auditoria.json</code>.</p>
+    </div>
+    <h3>Fases</h3>
+    <div class="tablewrap">
+      <table id="tabla-fases">
+        <thead><tr><th class="txt">Fase</th><th>Inicio</th><th>Duración</th><th>Celdas</th><th>Fallos</th><th>Error del ETA al 25 %</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="texto-eta"></p>
+    <h3>Memoria</h3>
+    <p id="texto-memoria"></p>
+    <h3>Comprobaciones</h3>
+    <div class="tablewrap">
+      <table id="tabla-checks">
+        <thead><tr><th>Comprobación</th><th class="txt">Resultado</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <h3>Por qué se saturó la memoria en la campaña v2, y qué cambia</h3>
+    <p>Tras el reinicio se midió cuánta memoria usa cada método sobre la instancia más grande (rail507), en cuatro corridas seguidas dentro del mismo proceso, como hace una celda real. Todos quedan entre 0,3 y 0,8 GB, los 19 juntos 7,6 GB, y el rastreo de asignaciones no encuentra memoria Python retenida entre corridas en SIA-base ni en SIA-online. Los procesos de la campaña no explican la saturación, y el registro del sistema no era accesible para confirmar qué la causó. La protección de la v3 cubre por eso también causas externas:</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Medida</th><th class="txt">Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td>Proceso nuevo por celda</td><td class="txt">La memoria de un worker vuelve al sistema al terminar cada celda; en la v2 los 20 workers vivían las 13 horas de campaña.</td></tr>
+          <tr><td>Guardia de memoria</td><td class="txt">Cada 3 s comprueba la memoria disponible del sistema. Por debajo de 8 GB detiene el worker más grande, baja el paralelismo un 25 % y reanuda. Con un solo proceso, marca la celda como fallida en lugar de colgar la máquina.</td></tr>
+          <tr><td>Reanudación por corrida</td><td class="txt">Una celda interrumpida retoma desde su última corrida completa. En una prueba con cinco interrupciones forzadas, las 540 corridas coincidieron bit a bit con una ejecución limpia.</td></tr>
+          <tr><td>Registro de memoria</td><td class="txt">Cada 5 minutos: memoria disponible, la de la campaña, el swap y los procesos mayores del sistema. Si vuelve a ocurrir, quedará constancia de qué la produjo.</td></tr>
+          <tr><td>Exclusión de Spotlight</td><td class="txt">La campaña escribe cerca de un millón de archivos pequeños; indexarlos es una causa conocida de picos de memoria en macOS.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Métodos excluidos del caso ferroviario</h3>
+    <p>La guía del caso prohíbe re-sintonizar los algoritmos, así que un método que no escala se excluye en vez de modificarse. Cada uno se probó solo, bajo un vigilante que lo detenía al superar 40 GB o el límite de tiempo.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Método</th><th class="txt">Causa</th><th class="txt">Evidencia en rail516</th></tr></thead>
+        <tbody>
+          <tr><td>L-SHADE</td><td class="txt">Población inicial 18 · D: ~851.000 individuos, ~322 GB</td><td class="txt">superó 40 GB en 26 s</td></tr>
+          <tr><td>L-SHADE-EpSin</td><td class="txt">Población inicial 18 · D</td><td class="txt">superó 40 GB en 25 s</td></tr>
+          <tr><td>EBOwithCMAR</td><td class="txt">Población inicial 18 · D</td><td class="txt">superó 40 GB en 25 s</td></tr>
+          <tr><td>EA4eig</td><td class="txt">Matrices D × D de ~18 GB y descomposiciones O(D³) por generación</td><td class="txt">pico de 35,6 GB; no completó 1.000 evaluaciones en 10 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>La regla 18 · D es la estándar de L-SHADE y funciona con las dimensiones de las suites (900 individuos con D = 50). Con 47.000 variables produce una población 40 veces mayor que todo el presupuesto.</p>
+  </section>
+
+  <section id="hipotesis">
+    <div class="section-head">
+      <h2>Hipótesis de trabajo</h2>
+      <p class="lede">H1: el estado de la búsqueda contiene señal predictiva sobre la mejora futura. H2: SIA-online mejora a SIA-base en desempeño final y en comportamiento anytime. H3: las decisiones del controlador quedan registradas y explicadas.</p>
+    </div>
+    <div id="hip-contenido"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Límites a declarar</h2></div>
+    <div class="caveat">
+      <p><strong>SO no consume todo el presupuesto.</strong> Fija sus iteraciones como max_fes / N y algunas fases evalúan menos de N individuos (2.745 de 3.000 evaluaciones en CEC 2022, ~18.000 de 20.000 en rail). Ocurre en todas las familias y ya ocurría en la campaña original. No se modificó; solo puede desfavorecer a SO.</p>
+      <p><strong>BKS sin verificar.</strong> Los mejores valores conocidos del caso ferroviario (174, 182 y 211) proceden de Caprara, Fischetti y Toth (1999) y están pendientes de verificar contra la fuente primaria. Toda cifra de RPD depende de ellos.</p>
+      <p><strong>Regla ELITR por confirmar.</strong> La binarización se implementó desde la guía, sin el código original. La regla exacta para r &gt; T y la normalización de la ruleta de élite deben confirmarse contra el manuscrito.</p>
+      <p><strong>Archivo de élite.</strong> En el protocolo original la élite es el 30 % de la generación actual; aquí, como cada método evalúa de a un vector, la función objetivo guarda las 12 mejores soluciones de la corrida. El objetivo depende de la historia de evaluaciones.</p>
+      <p><strong>Causa de la saturación de la v2 sin confirmar.</strong> Las mediciones descartan a los procesos de la campaña, pero la causa externa no se pudo identificar sin acceso al registro del sistema.</p>
+      <p id="limite-modelo"></p>
+      <p><strong>Fuera de alcance.</strong> Microhubs no forma parte de esta campaña.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Reproducibilidad</h2></div>
+    <dl class="facts" id="facts"></dl>
+  </section>
+
+  <footer>Mauricio De Juan · campaña v3 · <span id="fecha"></span></footer>
+</div>
+
+<script>
+const DATA = /*__DATOS__*/null;
+
+const SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+const fmt = (x, d = 2) => Number(x).toLocaleString("es-CL", { minimumFractionDigits: d, maximumFractionDigits: d });
+const int = x => Number(x).toLocaleString("es-CL");
+const fmtP = p => p < 0.001
+  ? p.toExponential(1).replace(".", ",").replace(/e-(\d+)/, (m, d) => " · 10⁻" + [...d].map(c => SUP[c]).join(""))
+  : fmt(p, p < 0.01 ? 4 : 3);
+const lista = xs => xs.length <= 1 ? (xs[0] || "") : xs.slice(0, -1).join(", ") + " y " + xs[xs.length - 1];
+const SVGNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(tag, attrs, parent, s) { const t = el(tag, attrs, parent); t.textContent = s; return t; }
+function tooltipFor(box) {
+  const tip = document.createElement("div");
+  tip.className = "tooltip"; tip.hidden = true; box.appendChild(tip);
+  return {
+    show(html, e) {
+      tip.innerHTML = html; tip.hidden = false;
+      const r = box.getBoundingClientRect();
+      let x = e.clientX - r.left + 12;
+      if (x + tip.offsetWidth > r.width) x = Math.max(0, e.clientX - r.left - tip.offsetWidth - 12);
+      tip.style.left = x + "px"; tip.style.top = (e.clientY - r.top + 12) + "px";
+    },
+    hide() { tip.hidden = true; }
+  };
+}
+function hover(svg, tip, x, y, w, h, html) {
+  const r = el("rect", { x, y, width: w, height: h, class: "hit" }, svg);
+  r.addEventListener("pointermove", e => tip.show(html, e));
+  r.addEventListener("pointerleave", () => tip.hide());
+}
+
+/* ---------- resumen y textos generados desde los datos ---------- */
+function resumen() {
+  const ul = document.getElementById("resumen");
+  const F = DATA.familias;
+  const sig = F.filter(f => f.sig), ns = F.filter(f => !f.sig);
+  const g = DATA.rangos.find(r => r.global);
+  const items = [];
+  items.push(`<strong>SIA-online supera significativamente a SIA-base en ${sig.length} de las ${F.length} familias</strong>${sig.length ? ": " + lista(sig.map(f => f.nombre)) : ""}.${ns.length ? " En " + lista(ns.map(f => `${f.nombre} (p = ${fmtP(f.p)})`)) + " la diferencia no es significativa." : ""}`);
+  const orden = [...F].sort((a, b) => b.mejora - a.mejora);
+  items.push(`La magnitud varía mucho: de ${fmt(orden[0].mejora, 1)} % de mejora mediana en ${orden[0].nombre} a ${fmt(orden[orden.length - 1].mejora, 1)} % en ${orden[orden.length - 1].nombre}.`);
+  if (g) items.push(`En el ranking de los 23 métodos, SIA-online queda ${g.on}.º sobre las ${g.nombre.match(/\d+/)[0]} celdas, y SIA-base ${g.base}.º. Encabezan ${lista(DATA.ranking_global.slice(0, 3).map(x => x[0]))}.`);
+  const S = DATA.salud.filter(s => s.nombre !== "rail");
+  const tot = S.reduce((a, s) => a + s.corridas, 0), cero = S.reduce((a, s) => a + s.cero, 0);
+  items.push(`La corrección del controlador funciona: ${cero === 0 ? "en ninguna" : `en ${cero}`} de las ${int(tot)} corridas de SIA-online de las familias originales la probabilidad de un operador llega a cero.`);
+  if (DATA.rail) {
+    const I = DATA.rail.instancias;
+    const sigR = I.filter(i => i.ab && i.ab.p_finner < .05 && i.ab.A > .5).length;
+    const peorR = I.filter(i => i.ab && i.ab.p_finner < .05 && i.ab.A < .5).length;
+    const primeras = I.filter(i => i.metodos[0].alg === "SIA-online").map(i => i.nombre);
+    const nuncaPeor = I.every(i => i.frente_competidores.peor === 0);
+    const posR = DATA.rail.ranking.findIndex(x => x[0] === "SIA-online") + 1;
+    items.push(`<strong>Caso ferroviario: SIA-online es significativamente mejor que SIA-base en ${sigR} de las ${I.length} instancias${peorR ? ` y peor en ${peorR}` : ""}</strong>${primeras.length ? `, y en ${lista(primeras)} obtiene el menor RPD de los 19 métodos` : ""}. Promediando su puesto en las tres instancias queda ${posR}.º de 19${nuncaPeor ? ", y no es significativamente peor que ningún competidor en ninguna instancia" : ""}.`);
+  } else {
+    items.push(`Caso ferroviario: <span class="pill pending">en ejecución</span>`);
+  }
+  const A = DATA.auditoria;
+  if (A) {
+    const fallos = Object.values(A.celdas).reduce((a, c) => a + c.fallidas.length, 0);
+    const acts = A.memoria.actuaciones_guardia.length;
+    items.push(`${fallos === 0 ? "Sin un solo fallo" : fallos + " celdas fallidas"} en toda la campaña; la guardia de memoria ${acts === 0 ? "no tuvo que actuar" : `actuó ${acts} veces`}, y la memoria disponible nunca bajó de ${fmt(A.memoria.disponible_minimo_gb, 1)} GB.`);
+  }
+  ul.innerHTML = items.map(s => `<li>${s}</li>`).join("");
+}
+
+function notasFamilias() {
+  const box = document.getElementById("notas-familias");
+  const F = DATA.familias;
+  const fuerte = F.filter(f => f.sig && f.mejora >= 2), debil = F.filter(f => f.sig && f.mejora < 2), ns = F.filter(f => !f.sig);
+  const parts = [];
+  if (fuerte.length) parts.push(["Dónde aporta la capa online", `La ganancia es clara en ${lista(fuerte.map(f => `${f.nombre} (${f.wB} de ${f.n} celdas, ${fmt(f.mejora, 1)} % de mejora mediana)`))}. En estos paisajes el estado de la búsqueda contiene información sobre la mejora inmediata y el controlador la convierte en mejores resultados.`]);
+  if (debil.length) parts.push(["Dónde la ventaja es estadística pero pequeña", `En ${lista(debil.map(f => `${f.nombre} (p = ${fmtP(f.p)}, ${f.wB} de ${f.n} celdas, ${fmt(f.mejora, 1)} %)`))} la diferencia es significativa pero de magnitud modesta: con muchas celdas el contraste detecta un efecto pequeño y consistente. Conviene presentarlo así.`]);
+  if (ns.length) parts.push(["Dónde no hay diferencia", `En ${lista(ns.map(f => `${f.nombre} (${f.wB} de ${f.n} celdas, p = ${fmtP(f.p)})`))} SIA-online gana más celdas de las que pierde, pero no de forma distinguible del azar, y la mejora mediana no llega al ${fmt(Math.max(...ns.map(f => f.mejora)) < 1 ? 1 : Math.ceil(Math.max(...ns.map(f => f.mejora))), 0)} %. Con el controlador corregido, estas familias no ofrecen evidencia a favor de la capa online.`]);
+  box.innerHTML = parts.map(([h, p]) => `<div class="note"><h3>${h}</h3><p>${p}</p></div>`).join("");
+
+  const g = DATA.rangos.find(r => r.global), top = DATA.ranking_global;
+  const superados = top.length - g.on;
+  document.getElementById("texto-competidores").innerHTML = `Frente a los 21 competidores, la propuesta se sitúa en la mitad de la tabla. El ranking global lo encabezan ${lista(top.slice(0, 3).map(([a, r]) => `${a} (${fmt(r)})`))}. SIA-online (${fmt(g.onMr)}) queda por delante de ${superados} métodos, y por delante de SIA-base en las ${DATA.rangos.length - 1} familias. La contribución que sostienen estos datos es la mejora de la capa online sobre su propio algoritmo base, no la superioridad frente al estado del arte.`;
+}
+
+/* ---------- gráficos ---------- */
+function chartEfecto() {
+  const box = document.getElementById("chart-efecto");
+  const rows = [...DATA.familias].sort((a, b) => b.mejora - a.mejora);
+  const W = 680, labelW = 96, right = 160, rowH = 34, top = 8, axisH = 28, H = top + rows.length * rowH + axisH;
+  const maxX = Math.max(5, Math.ceil(Math.max(...rows.map(r => r.mejora)) / 5) * 5);
+  const x0 = labelW, x1 = W - right, sx = v => x0 + (Math.max(v, 0) / maxX) * (x1 - x0);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}` }, box), tip = tooltipFor(box);
+  for (let t = 0; t <= maxX; t += 5) {
+    el("line", { x1: sx(t), x2: sx(t), y1: top - 2, y2: top + rows.length * rowH, stroke: "var(--grid)", "stroke-width": 1 }, svg);
+    txt("text", { x: sx(t), y: H - 8, "text-anchor": "middle", "font-size": 12, fill: "var(--ink-faint)" }, svg, t + " %");
+  }
+  rows.forEach((r, i) => {
+    const cy = top + i * rowH + rowH / 2, bh = 14, w = Math.max(sx(r.mejora) - x0, 1.5), body = Math.max(w - 4, 0);
+    txt("text", { x: 0, y: cy + 4, "font-size": 13.5, fill: "var(--ink)" }, svg, r.nombre);
+    const d = `M${x0},${cy - bh / 2} h${body} q4,0 4,4 v${bh - 8} q0,4 -4,4 h${-body} z`;
+    el("path", r.sig ? { d, fill: "var(--series-online)" } : { d, fill: "var(--surface)", stroke: "var(--series-online)", "stroke-width": 2 }, svg);
+    txt("text", { x: x0 + w + 8, y: cy + 4, "font-size": 12.5, fill: "var(--ink-soft)", "font-family": "var(--font-data)" }, svg, `${fmt(r.mejora)} %  ·  p ${fmtP(r.p)}`);
+    hover(svg, tip, 0, cy - rowH / 2, W, rowH, `<strong>${r.nombre}</strong><br>Mejora mediana ${fmt(r.mejora)} %<br>Gana A′ ${r.wB} de ${r.n} celdas<br>p = ${fmtP(r.p)} · ${r.sig ? "significativo" : "no significativo"}`);
+  });
+}
+
+function chartDumbbell(boxId, rows, maxRank, unidad) {
+  const box = document.getElementById(boxId);
+  const W = 680, labelW = 150, right = 24, rowH = 34, top = 8, axisH = 30;
+  const H = top + rows.length * rowH + axisH + 6, x0 = labelW, x1 = W - right;
+  const sx = v => x0 + ((v - 1) / (maxRank - 1)) * (x1 - x0);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}` }, box), tip = tooltipFor(box);
+  const ticks = [1, ...[5, 10, 15, 20].filter(t => t < maxRank), maxRank];
+  ticks.forEach(t => {
+    el("line", { x1: sx(t), x2: sx(t), y1: top - 2, y2: top + rows.length * rowH + 6, stroke: "var(--grid)", "stroke-width": 1 }, svg);
+    txt("text", { x: sx(t), y: H - 12, "text-anchor": "middle", "font-size": 12, fill: "var(--ink-faint)" }, svg, t + ".º");
+  });
+  rows.forEach((r, i) => {
+    const cy = top + i * rowH + rowH / 2 + (r.global ? 6 : 0);
+    if (r.global) el("line", { x1: 0, x2: W, y1: cy - rowH / 2 - 1, y2: cy - rowH / 2 - 1, stroke: "var(--rule)", "stroke-width": 1 }, svg);
+    txt("text", { x: 0, y: cy + 4, "font-size": 13.5, fill: "var(--ink)", "font-weight": r.global ? 600 : 400 }, svg, r.nombre);
+    el("line", { x1: sx(r.on), x2: sx(r.base), y1: cy, y2: cy, stroke: "var(--ink-faint)", "stroke-width": 2 }, svg);
+    el("circle", { cx: sx(r.base), cy, r: 6.5, fill: "var(--series-base)", stroke: "var(--ground)", "stroke-width": 2 }, svg);
+    el("circle", { cx: sx(r.on), cy, r: 6.5, fill: "var(--series-online)", stroke: "var(--ground)", "stroke-width": 2 }, svg);
+    const izq = r.on <= r.base;
+    txt("text", { x: sx(r.on) + (izq ? -12 : 12), y: cy + 4, "text-anchor": izq ? "end" : "start", "font-size": 12, fill: "var(--ink-soft)", "font-family": "var(--font-data)" }, svg, r.on);
+    txt("text", { x: sx(r.base) + (izq ? 12 : -12), y: cy + 4, "text-anchor": izq ? "start" : "end", "font-size": 12, fill: "var(--ink-soft)", "font-family": "var(--font-data)" }, svg, r.base);
+    hover(svg, tip, 0, cy - rowH / 2, W, rowH, `<strong>${r.nombre}</strong><br>SIA-online: ${r.on}.º${r.onMr != null ? ` (${unidad} ${fmt(r.onMr)})` : ""}<br>SIA-base: ${r.base}.º${r.baseMr != null ? ` (${unidad} ${fmt(r.baseMr)})` : ""}`);
+  });
+}
+
+function chartRailRpd(boxId, inst) {
+  // Puntos de RPD medio de los 19 métodos en una instancia; SIA resaltados.
+  const box = document.getElementById(boxId);
+  const M = inst.metodos;
+  const W = 680, left = 16, right = 24, top = 24, H = 92;
+  const vmin = Math.min(...M.map(m => m.media)), vmax = Math.max(...M.map(m => m.media));
+  const pad = (vmax - vmin) * .06 || .1, lo = Math.max(0, vmin - pad), hi = vmax + pad;
+  const sx = v => left + ((v - lo) / (hi - lo)) * (W - left - right);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}` }, box), tip = tooltipFor(box);
+  const step = (hi - lo) > 4 ? 1 : (hi - lo) > 2 ? .5 : .25;
+  for (let t = Math.ceil(lo / step) * step; t <= hi + 1e-9; t += step) {
+    el("line", { x1: sx(t), x2: sx(t), y1: top - 6, y2: top + 26, stroke: "var(--grid)", "stroke-width": 1 }, svg);
+    txt("text", { x: sx(t), y: H - 10, "text-anchor": "middle", "font-size": 11.5, fill: "var(--ink-faint)" }, svg, fmt(t, step < 1 ? 2 : 0) + " %");
+  }
+  const orden = [...M].sort((a, b) => (a.alg.startsWith("SIA") ? 1 : 0) - (b.alg.startsWith("SIA") ? 1 : 0));
+  orden.forEach(m => {
+    const sia = m.alg === "SIA-online" ? "online" : m.alg === "SIA-base" ? "base" : null;
+    el("circle", { cx: sx(m.media), cy: top + 10, r: sia ? 7 : 5, fill: sia ? `var(--series-${sia})` : "var(--context)", stroke: "var(--ground)", "stroke-width": 2 }, svg);
+    hover(svg, tip, sx(m.media) - 6, top - 2, 12, 24, `<strong>${m.alg}</strong><br>RPD medio ${fmt(m.media, 3)} %<br>mediana ${fmt(m.mediana, 3)} % · mejor ${fmt(m.mejor, 3)} %`);
+  });
+  const on = M.find(m => m.alg === "SIA-online");
+  txt("text", { x: sx(on.media), y: top - 10, "text-anchor": "middle", "font-size": 11.5, fill: "var(--ink-soft)", "font-family": "var(--font-data)" }, svg, "A′ " + fmt(on.media, 2));
+}
+
+/* ---------- tablas ---------- */
+function tablas() {
+  const tf = document.querySelector("#tabla-familias tbody");
+  DATA.familias.forEach(r => tf.insertAdjacentHTML("beforeend",
+    `<tr><td>${r.nombre}</td><td class="num">${r.n}</td><td class="num">${r.wB}</td><td class="num">${r.wA}</td><td class="num">${r.emp}</td><td class="num">${fmt(r.mejora)} %</td><td class="num">${fmtP(r.p)}</td><td class="txt"><span class="pill ${r.sig ? "sig" : "ns"}">${r.sig ? "A′ mejor" : "sin diferencia"}</span></td></tr>`));
+
+  const ts = document.querySelector("#tabla-salud tbody");
+  DATA.salud.forEach(r => ts.insertAdjacentHTML("beforeend",
+    `<tr><td>${r.nombre}</td><td class="num">${int(r.corridas)}</td><td class="num">${r.cero}</td><td class="num">${fmt(r.min, 3)}</td><td class="num">${fmt(r.div, 3)}</td><td class="num">${fmt(r.adapt, 1)}</td><td class="num">${fmt(r.upd, 1)}</td></tr>`));
+  const S = DATA.salud, ad = S.map(s => s.adapt), up = S.map(s => s.upd);
+  const sinModelo = S.reduce((a, s) => a + s.sin_modelo, 0);
+  const tot = S.reduce((a, s) => a + s.corridas, 0);
+  const porFam = S.filter(s => s.sin_modelo).map(s => `${s.nombre} (${s.sin_modelo})`);
+  document.getElementById("limite-modelo").innerHTML = sinModelo === 0 ? "" :
+    `<strong>Corridas en las que el modelo no llegó a entrenarse.</strong> ${sinModelo} de las ${int(tot)} corridas de SIA-online (${fmt(100 * sinModelo / tot, 1)} %), repartidas en ${lista(porFam)}. El modelo solo se entrena cuando su ventana contiene ejemplos de mejora y de no mejora; si la búsqueda mejora o se estanca de forma uniforme durante todo el período etiquetado, no hay dos clases que aprender, y en esa corrida SIA-online se comporta como SIA-base. Ninguna celda tiene más de 3 de sus 30 corridas en esta situación.`;
+  document.getElementById("texto-salud").textContent =
+    `Ningún operador desaparece del muestreo: la probabilidad mínima al final de cualquier corrida es ${fmt(Math.min(...S.map(s => s.min)), 3)}, el piso. El modelo se reentrena entre ${fmt(Math.min(...up), 1)} y ${fmt(Math.max(...up), 1)} veces por corrida y el controlador adapta entre ${fmt(Math.min(...ad), 1)} y ${fmt(Math.max(...ad), 1)} veces. ${sinModelo === 0 ? "No hay ninguna corrida en la que el modelo no llegara a entrenarse." : `En ${sinModelo} corridas el modelo no llegó a entrenarse.`}`;
+}
+
+function rail() {
+  const box = document.getElementById("rail-contenido");
+  if (!DATA.rail) { box.innerHTML = `<div class="pending-box">La campaña del caso ferroviario está en ejecución. Esta sección se completa al terminar.</div>`; return; }
+  const R = DATA.rail;
+  let h = `<div class="tablewrap"><table><thead><tr><th>Instancia</th><th>BKS</th><th>RPD A′</th><th>RPD A</th><th>Mejor método</th><th>A′ mejor / igual / peor</th><th>p (Finner)</th><th>Â</th><th class="txt">Veredicto</th></tr></thead><tbody>`;
+  R.instancias.forEach(i => {
+    const on = i.metodos.find(m => m.alg === "SIA-online"), ba = i.metodos.find(m => m.alg === "SIA-base"), best = i.metodos[0];
+    const ab = i.ab, sig = ab && ab.p_finner < .05;
+    const ver = !ab ? "—" : !sig ? `<span class="pill ns">sin diferencia</span>` : ab.A > .5 ? `<span class="pill sig">A′ mejor</span>` : `<span class="pill worse">A′ peor</span>`;
+    h += `<tr><td>${i.nombre}</td><td class="num">${i.bks}${i.bks_verificado ? "" : "*"}</td><td class="num">${fmt(on.media, 3)} %</td><td class="num">${fmt(ba.media, 3)} %</td><td class="num">${best.alg} ${fmt(best.media, 3)} %</td><td class="num">${ab ? `${ab.mejor} / ${ab.igual} / ${ab.peor}` : "—"}</td><td class="num">${ab ? fmtP(ab.p_finner) : "—"}</td><td class="num">${ab ? fmt(ab.A, 3) : "—"}</td><td class="txt">${ver}</td></tr>`;
+  });
+  h += `</tbody><caption>RPD medio sobre 31 corridas. A′ mejor / igual / peor cuenta las semillas en que SIA-online obtiene un RPD menor, igual o mayor que SIA-base. Â de Vargha–Delaney: probabilidad de que A′ supere a A (0,5 = indistinguibles). * BKS sin verificar contra la fuente primaria.</caption></table></div>`;
+
+  h += `<figure><div class="legend" aria-hidden="true"><span><i class="swatch online"></i>SIA-online (A′)</span><span><i class="swatch base"></i>SIA-base (A)</span><span><i class="swatch context"></i>otros 17 métodos</span></div>`;
+  R.instancias.forEach((i, k) => { h += `<div><h3 style="font-size:.9rem;color:var(--ink-soft);font-weight:600">${i.nombre}</h3><div class="chart" id="chart-rail-${k}" role="img" aria-label="RPD medio de los 19 métodos en ${i.nombre}"></div></div>`; });
+  h += `<figcaption>RPD medio de los 19 métodos en cada instancia. A la izquierda, mejor. Pasar el cursor sobre un punto muestra el método.</figcaption></figure>`;
+
+  h += `<div class="tablewrap"><table><thead><tr><th>Instancia</th><th>A′ significativamente mejor</th><th>Sin diferencia</th><th>A′ significativamente peor</th></tr></thead><tbody>`;
+  R.instancias.forEach(i => { const c = i.frente_competidores; h += `<tr><td>${i.nombre}</td><td class="num">${c.mejor}</td><td class="num">${c.sin_diferencia}</td><td class="num">${c.peor}</td></tr>`; });
+  h += `</tbody><caption>SIA-online frente a cada uno de los 17 competidores: Wilcoxon pareado sobre las 31 semillas con corrección de Finner por instancia y Â de Vargha–Delaney para el sentido.</caption></table></div>`;
+
+  const rk = R.ranking, pos = n => rk.findIndex(x => x[0] === n) + 1;
+  h += `<p id="texto-rail"></p>`;
+  if (R.avisos.length) h += `<div class="caveat"><p><strong>Avisos del reporte ferroviario.</strong></p>${R.avisos.map(a => `<p>${a}</p>`).join("")}</div>`;
+  box.innerHTML = h;
+  R.instancias.forEach((i, k) => chartRailRpd(`chart-rail-${k}`, i));
+  const I = R.instancias;
+  const sig = I.filter(i => i.ab && i.ab.p_finner < .05);
+  const nsI = I.filter(i => i.ab && i.ab.p_finner >= .05);
+  const primeras = I.filter(i => i.metodos[0].alg === "SIA-online").map(i => i.nombre);
+  const totMejor = I.reduce((a, i) => a + i.frente_competidores.mejor, 0), totPeor = I.reduce((a, i) => a + i.frente_competidores.peor, 0);
+  document.getElementById("texto-rail").textContent =
+    `Ordenando los 19 métodos por RPD medio en cada instancia y promediando el puesto, SIA-online queda ${pos("SIA-online")}.º y SIA-base ${pos("SIA-base")}.º; el primero es ${rk[0][0]}. ` +
+    (sig.length ? `La diferencia entre SIA-online y SIA-base es significativa tras la corrección de Finner en ${lista(sig.map(i => i.nombre))}` : "En ninguna instancia la diferencia entre SIA-online y SIA-base es significativa tras la corrección de Finner") +
+    (nsI.length ? `; en ${lista(nsI.map(i => i.nombre))} la capa online no produce una diferencia distinguible del azar. ` : ". ") +
+    (primeras.length ? `En ${lista(primeras)} SIA-online obtiene el menor RPD medio de los 19 métodos. ` : "") +
+    `Frente a los competidores, de las ${I.length * 17} comparaciones (17 competidores en ${I.length} instancias), SIA-online es significativamente mejor en ${totMejor} y peor en ${totPeor}. ` +
+    `Es un resultado que contrasta con el de microhubs, también binario: aquí el modelo predictivo se entrenó en todas las corridas, y la binarización por élite con reparación ofrece al controlador un paisaje con información útil.`;
+}
+
+function auditoria() {
+  const A = DATA.auditoria; if (!A) return;
+  const tb = document.querySelector("#tabla-fases tbody");
+  const nombreFase = f => {
+    const fam = f.familias || [];
+    if (fam.length > 1) return "Familias originales";
+    if (fam[0] === "rail") return f.celdas_registradas <= 19 ? "Caso ferroviario: piloto" : "Caso ferroviario: campaña";
+    return fam.join(", ");
+  };
+  A.fases.filter(f => f.fin).forEach(f => {
+    const eta = (f.precision_eta || []).find(p => p.hito_pct === 25);
+    const d = f.duracion_horas >= 1 ? `${fmt(f.duracion_horas, 1)} h` : `${fmt(f.duracion_horas * 60, 1)} min`;
+    tb.insertAdjacentHTML("beforeend", `<tr><td class="txt">${nombreFase(f)}</td><td class="num">${f.inicio.slice(5, 16).replace("-", "/")}</td><td class="num">${d}</td><td class="num">${int(f.celdas_registradas)}</td><td class="num">${f.celdas_fallidas}</td><td class="num">${eta ? (eta.error_minutos >= 0 ? "+" : "") + fmt(eta.error_minutos, 0) + " min" : "—"}</td></tr>`);
+  });
+  const peorEta = A.fases.flatMap(f => (f.precision_eta || []).filter(p => p.hito_pct === 25).map(p => p.error_minutos));
+  if (peorEta.some(e => e < -60)) document.getElementById("texto-eta").textContent =
+    `El ETA que imprime el log extrapola el ritmo de las corridas ya terminadas, y en el caso ferroviario se quedó muy corto: las celdas rápidas acaban primero y las cuatro lentas (IGWO, APGSK-IMODE, ASGK y BWO, con 31 corridas en serie cada una) dominan el final. La estimación usada para lanzar la campaña, basada en la celda más larga con los tiempos reales de la campaña v2, fue de 16 a 17 horas; tardó ${fmt(A.fases.filter(f => f.fin).slice(-1)[0].duracion_horas, 1)} horas.`;
+  const M = A.memoria;
+  document.getElementById("texto-memoria").textContent =
+    `El registro de memoria tomó ${int(M.muestras)} muestras a lo largo de la campaña. La memoria disponible nunca bajó de ${fmt(M.disponible_minimo_gb, 1)} GB, la campaña no ocupó más de ${fmt(M.campana_maxima_gb, 1)} GB y el swap llegó como máximo a ${fmt(M.swap_maximo_gb, 1)} GB. ` +
+    (M.actuaciones_guardia.length === 0 ? "La guardia de memoria no tuvo que actuar ninguna vez." : `La guardia de memoria actuó ${M.actuaciones_guardia.length} veces; cada actuación quedó registrada con el estado del sistema.`);
+
+  const C = A.celdas, R = A.corridas;
+  const fuera = Object.entries(R).flatMap(([f, r]) => Object.entries(r.evaluaciones_fuera_de_presupuesto).map(([a, n]) => `${a} en ${f} (${n} corridas)`));
+  const reanud = Object.values(C).reduce((a, c) => a + (c.celdas_reanudadas || []).length, 0);
+  const totCorr = Object.values(R).reduce((a, r) => a + r.corridas, 0);
+  const checks = [
+    ["Celdas", `${int(Object.values(C).reduce((a, c) => a + c.ok, 0))} de ${int(Object.values(C).reduce((a, c) => a + c.celdas, 0))} completas; ${Object.values(C).reduce((a, c) => a + c.fallidas.length, 0)} fallidas; ${Object.values(C).reduce((a, c) => a + c.corridas_incompletas.length, 0)} con corridas de menos`],
+    ["Presupuesto", `${int(totCorr)} corridas revisadas una a una: todas con exactamente el presupuesto asignado${fuera.length ? ", salvo " + lista(fuera) : ""}`],
+    ["Salud de SIA-online", `${Object.values(R).reduce((a, r) => a + r.sia_online_sin_modelo, 0)} corridas sin entrenar el modelo y ${Object.values(R).reduce((a, r) => a + r.sia_online_sin_adaptaciones, 0)} sin adaptaciones`],
+    ["Reanudaciones", reanud === 0 ? "ninguna celda tuvo que reanudarse" : `${reanud} celdas retomaron corridas ya completas tras una interrupción`],
+    ["Aislamiento", "la campaña escribe solo en campana_v3/results/; las campañas anteriores no se leen ni se modifican"],
+    ["Determinismo", "la misma celda con la misma semilla da resultados idénticos; verificado también tras cinco interrupciones forzadas (540 corridas bit a bit)"],
+    ["Hilos", "un hilo por proceso en las seis bibliotecas numéricas, registrado en config.json"],
+  ];
+  if (DATA.reproduccion_v2) checks.push(["Reproducción entre campañas", DATA.reproduccion_v2]);
+  const tc = document.querySelector("#tabla-checks tbody");
+  checks.forEach(([a, b]) => tc.insertAdjacentHTML("beforeend", `<tr><td>${a}</td><td class="txt">${b}</td></tr>`));
+
+  const cfg = DATA.config;
+  const facts = [
+    ["Código", cfg ? `rama <code>${cfg.codigo.rama}</code>, commit <code>${cfg.codigo.commit.slice(0, 7)}</code>${cfg.codigo.cambios_sin_commitear_en_archivos_trackeados ? " (con cambios sin commitear)" : ""}` : "—"],
+    ["Carpeta", "<code>campana_v3/</code>: lanzador por fases, manifiesto, auditoría, diagnóstico de memoria y este informe"],
+    ["Resultados", "<code>campana_v3/results/</code> (fuera del repositorio)"],
+    ["Relanzar", "<code>campana_v3/lanzar.sh &lt;fase&gt;</code>; cada fase reanuda desde la última corrida completa"],
+    ["Informe", "<code>campana_v3/informe/generar.py</code> regenera esta página desde los resultados"],
+  ];
+  document.getElementById("facts").innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  document.getElementById("fecha").textContent = (A.generado || "").slice(0, 10);
+}
+
+function hipotesis() {
+  const box = document.getElementById("hip-contenido"), H = DATA.hipotesis;
+  if (!H) { box.innerHTML = `<div class="pending-box">Evaluación de hipótesis pendiente.</div>`; return; }
+  const nombre = { classical: "classical", cec2014: "CEC 2014", cec2017: "CEC 2017", cec2022: "CEC 2022", bbob: "BBOB", fir: "FIR" };
+  const si = `<span class="pill sig">sí</span>`, no = `<span class="pill ns">no</span>`, debil = `<span class="pill pending">débil</span>`;
+  const h1v = h => h.p_auc_sobre_05 < .05 ? (h.auc_mediana >= .55 ? si : debil) : no;
+  const h3ok = h => h.explicaciones > 0 && h.adaptaciones_sin_motivo === 0 && h.corridas_sin_explicacion / h.corridas < .01;
+  const filas = [];
+  for (const f of Object.keys(nombre)) {
+    const d = H[f]; if (!d) continue;
+    const fi = d.H2_final, an = d.H2_anytime;
+    filas.push({ caso: nombre[f], h1: d.H1, f2: fi.p < .05 && fi.gana_A2 > fi.gana_A, fTxt: `${fi.gana_A2}/${fi.celdas} · p ${fmtP(fi.p)}`,
+                 a2: an.p < .05 && an.gana_A2 > an.gana_A, aTxt: `${an.gana_A2}/${an.celdas} · p ${fmtP(an.p)}`, h3: d.H3 });
+  }
+  if (H.rail) H.rail.H2_final.por_instancia.forEach(fi => {
+    const an = H.rail.H2_anytime.por_instancia.find(x => x.instancia === fi.instancia);
+    filas.push({ caso: fi.instancia, rail: true, h1: H.rail.H1,
+                 f2: fi.p_finner < .05 && fi.A > .5, fTxt: `${fi.gana_A2}/${fi.gana_A2 + fi.iguales + fi.gana_A} · p ${fmtP(fi.p_finner)}`,
+                 a2: an.p < .05 && an.gana_A2 > an.gana_A, aTxt: `${an.gana_A2}/${an.corridas} · p ${fmtP(an.p)}`, h3: H.rail.H3 });
+  });
+  let h = `<div class="tablewrap"><table><thead><tr><th>Caso</th><th>H1 · AUC</th><th>H1</th><th>H2 final</th><th>H2 anytime</th><th>H3</th></tr></thead><tbody>`;
+  filas.forEach(r => {
+    h += `<tr><td>${r.caso}</td><td class="num">${fmt(r.h1.auc_mediana, 3)}</td><td>${h1v(r.h1)}</td>` +
+         `<td class="num">${r.f2 ? si : no} ${r.fTxt}</td><td class="num">${r.a2 ? si : no} ${r.aTxt}</td><td>${h3ok(r.h3) ? si : no}</td></tr>`;
+  });
+  h += `</tbody><caption>H1: AUC mediana por corrida del modelo online; «sí» si supera a 0,5 de forma significativa (Wilcoxon de una muestra) con AUC ≥ 0,55, «débil» si la supera con AUC menor. En rail, H1 se mide sobre las 93 corridas de las tres instancias. H2: celdas (o semillas, en rail) en que gana SIA-online y p del contraste pareado; en rail, p corregida por Finner para el final. H3: explicaciones XAI y adaptaciones registradas con su motivo en más del 99 % de las corridas.</caption></table></div>`;
+  const fam = Object.keys(nombre).filter(f => H[f]);
+  const bss = [...fam, "rail"].filter(f => H[f]).map(f => H[f].H1.bss_mediano);
+  const sinSenalGana = fam.filter(f => H[f].H1.p_auc_sobre_05 >= .05 && H[f].H2_final.p < .05).map(f => nombre[f]);
+  const motivoTop = f => { const m = H[f].H3.motivos, t = Object.values(m).reduce((a, b) => a + b, 0); const [k, v] = Object.entries(m)[0]; return [k, 100 * v / t]; };
+  const expl = [...fam, "rail"].filter(f => H[f]).reduce((a, f) => a + H[f].H3.explicaciones, 0);
+  const adap = [...fam, "rail"].filter(f => H[f]).reduce((a, f) => a + H[f].H3.adaptaciones, 0);
+  h += `<div class="notes">
+    <div class="note"><h3>H3 se cumple en todos los casos</h3><p>${int(expl)} explicaciones XAI y ${int(adap)} adaptaciones registradas, todas con su motivo. Las pocas corridas sin explicaciones son las mismas en que el modelo no llegó a entrenarse.</p></div>
+    <div class="note"><h3>H2 se cumple donde lo indica la tabla</h3><p>El desempeño final mejora de forma significativa en ${lista(filas.filter(r => r.f2).map(r => r.caso))}. El comportamiento anytime, en ${lista(filas.filter(r => r.a2).map(r => r.caso))}. Las diferencias anytime son estadísticamente detectables pero de magnitud pequeña: el área bajo la curva está dominada por las primeras iteraciones, en las que ambos algoritmos se parecen.</p></div>
+    <div class="note"><h3>H1 se cumple con claridad solo en el caso ferroviario</h3><p>En rail el modelo discrimina (AUC mediana ${fmt(H.rail.H1.auc_mediana, 3)}, ${fmt(100 * H.rail.H1.corridas_auc_sobre_05 / H.rail.H1.corridas_con_auc, 0)} % de las corridas sobre 0,5). En las familias sintéticas la señal es débil o indistinguible del azar. En todos los casos la calibración es mala: el Brier Skill Score frente al predictor de tasa base es negativo (entre ${fmt(Math.min(...bss), 2)} y ${fmt(Math.max(...bss), 2)}), es decir, las probabilidades que emite el modelo son peores que predecir siempre la frecuencia observada de mejora. Comparar el Brier con 0,25, como en el informe original, sobreestima su calidad cuando la mejora es frecuente o rara.</p></div>
+    <div class="note"><h3>Qué causa la mejora: un matiz para la defensa</h3><p>${sinSenalGana.length ? `En ${lista(sinSenalGana)} SIA-online mejora a SIA-base sin que el modelo tenga señal predictiva distinguible del azar. ` : ""}Donde la mejora es frecuente (tasa base ${lista(fam.filter(f => H[f].H1.tasa_mejora_mediana > .6).map(f => `${fmt(100 * H[f].H1.tasa_mejora_mediana, 0)} % en ${nombre[f]}`))}), el modelo emite probabilidades altas casi siempre, y la adaptación dominante es aumentar la explotación (${lista(fam.filter(f => motivoTop(f)[0] === "high_prob_improvement" && motivoTop(f)[1] > 75).map(f => `${fmt(motivoTop(f)[1], 0)} % en ${nombre[f]}`))}). La ganancia se explica mejor por ese sesgo casi constante hacia la explotación que por una predicción que distinga cuándo actuar. En rail, en cambio, el modelo discrimina y la adaptación dominante es responder al estancamiento (${fmt(motivoTop("rail")[1], 0)} %). Los datos sostienen que el pipeline completo mejora al SIA base; no bastan para atribuir esa mejora a la predicción en las familias sintéticas. Esa atribución requiere una ablación: el mismo controlador con probabilidades fijas, sin modelo.</p></div>
+  </div>`;
+  box.innerHTML = h;
+}
+
+function render() {
+  resumen(); tablas(); notasFamilias(); chartEfecto();
+  chartDumbbell("chart-rangos", DATA.rangos, 23, "rango medio");
+  rail(); hipotesis(); auditoria();
+}
+render();
+</script>

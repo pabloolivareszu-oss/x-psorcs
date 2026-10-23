@@ -1,0 +1,11 @@
+{
+  "_nota": "BKS y n de las instancias rail. n se verifica automáticamente con tools/fetch_rail.py contra el encabezado del archivo. BKS verificados el 2026-10-09 contra: (a) Tayebi & Ray, FedCSIS 2024, Tabla III, ILP con Gurobi, doi:10.15439/2024F7060; (b) MIPLIB 2017 (rail507), https://miplib.zib.de/instance_details_rail507.html; (c) cotas LP de Umetani & Yagiura (2007), J. Oper. Res. Soc. Japan 50(4):350-375 (172.15, 182.00, 209.71).",
+  "instances": {
+    "rail507": {"m": 507, "n": 63009, "bks": 174, "verified": true,
+                "source": "Óptimo: MIPLIB 2017 (objetivo 174) y ILP de Tayebi & Ray (2024)."},
+    "rail516": {"m": 516, "n": 47311, "bks": 182, "verified": true,
+                "source": "Óptimo: ILP de Tayebi & Ray (2024); coincide con la cota LP 182.00 de Umetani & Yagiura (2007)."},
+    "rail582": {"m": 582, "n": 55515, "bks": 211, "verified": true,
+                "source": "Óptimo: ILP de Tayebi & Ray (2024)."}
+  }
+}

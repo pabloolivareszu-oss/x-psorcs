@@ -1,0 +1,79 @@
+{
+  "distance_metric": "euclidean(clients,hubs)",
+  "generation": {
+    "k_min": 2,
+    "gamma_band": [
+      0.4,
+      0.6
+    ],
+    "load_factor": 0.8,
+    "q_range": [
+      1,
+      6
+    ],
+    "w_range": [
+      1.0,
+      2.0
+    ],
+    "f_range": [
+      20,
+      60
+    ],
+    "o_range": [
+      0,
+      2
+    ],
+    "Pmin_frac": 0.15,
+    "Pmax_frac": 0.5
+  },
+  "tiers": [
+    {
+      "tier": "L",
+      "n": 100,
+      "m": 25,
+      "n_instances": 20,
+      "file": "mlpap_L.json",
+      "size_MB": 0.11
+    },
+    {
+      "tier": "XL",
+      "n": 250,
+      "m": 40,
+      "n_instances": 20,
+      "file": "mlpap_XL.json",
+      "size_MB": 0.26
+    },
+    {
+      "tier": "2XL",
+      "n": 500,
+      "m": 70,
+      "n_instances": 20,
+      "file": "mlpap_2XL.json",
+      "size_MB": 0.5
+    },
+    {
+      "tier": "3XL",
+      "n": 1000,
+      "m": 120,
+      "n_instances": 15,
+      "file": "mlpap_3XL.json",
+      "size_MB": 0.73
+    },
+    {
+      "tier": "4XL",
+      "n": 2000,
+      "m": 200,
+      "n_instances": 15,
+      "file": "mlpap_4XL.json",
+      "size_MB": 1.42
+    },
+    {
+      "tier": "5XL",
+      "n": 4000,
+      "m": 320,
+      "n_instances": 15,
+      "file": "mlpap_5XL.json",
+      "size_MB": 2.76
+    }
+  ]
+}
